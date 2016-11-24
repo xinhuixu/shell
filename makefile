@@ -1,6 +1,6 @@
-test: shell.c
-	gcc shell.c -o test
+test: shell.c func.c
+	gcc shell.c func.c -o test
 clean:
-	rm *~
+	rm *~ *.o
 run: test
 	./test

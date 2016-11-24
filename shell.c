@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "func.h"
 
 int main() {
 
+  
   while (1){
 
     /*
@@ -17,7 +19,7 @@ int main() {
      */
 
     char buf[50];
-    printf("what's good: ");
+    prompt();
     fgets(buf, sizeof(buf), stdin);
     char * bufadd = buf;
     bufadd = strsep(&bufadd, "\n");
@@ -32,15 +34,14 @@ int main() {
     if (f == 0) {
       int err = execvp( command[0], command );
       if (err) {
-	printf("\t!child err: %d\n",err);
 	exit(err);
-	WEXITSTATUS
       }
     }
     else {
       int status, r;
       r = wait( &status ); // terminated child
-      printf("\twait returned: %d, status: %d\n", r, status);
+      check_status(status);
+      printf("\t!wait returned: %d, status: %d\n", r, status);
     }
   }
 }
