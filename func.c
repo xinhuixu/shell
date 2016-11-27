@@ -31,14 +31,18 @@ void pstr(char *c){
 
 int def_check(char *c[]){
   parray(c);
-  if (strcmp(c[0],def_str[0]) == 0) { //cd  
-    if (c[1]){      
-      return chdir(c[1]);
+  if (strcmp(c[0],def_str[0]) == 0) { //cd
+    if (c[1]){
+      /*if (strcmp(c[1],"\n") == 0)
+	return chdir("~"); //bash behavior */
+      int res = chdir(c[1]);
+      if (res == 0)
+	printf("cd %s: success\n",c[1]);
+      return res;
     }
     else {
-      //fprintf(stderr, "cd: where are you going?\n");
       return -1;
-      }
+    }
   }
   else
     return execvp(c[0],c);
