@@ -28,15 +28,17 @@ int main() {
 	   
     int f = fork();
     if (f == 0) {
-      int err = execvp( command[0], command );
+      int err = def_check(command);
+      
       if (err) {
+	perror("shell");
 	exit(err);
       }
     }
     else {
       int status, r;
       r = wait( &status ); // terminated child
-      check_status(status);
+      //check_status(status); //currently replaced by perror()
       printf("\t!wait returned: %d, status: %d\n", r, status);
     }
   }
