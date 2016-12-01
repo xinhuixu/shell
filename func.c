@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 
-char *def_str[2] = {
+char *def_str[3] = {
   "cd",
-  "exit"
+  ">",
+  "|"
 };
 
 void prompt(){
@@ -24,13 +26,14 @@ void pstr(char *c){
   printf("str = %s\n",c);
 }
 
-/*void check_status(int n){
-  if (n == 65280)
-    printf("\t!invalid command.\n");
-    }*/
+void bye(){
+  printf("all parties ends\n");
+  exit(0);
+}
 
 int def_check(char *c[]){
-  parray(c);
+  //parray(c);
+
   if (strcmp(c[0],def_str[0]) == 0) { //cd
     if (c[1]){
       /*if (strcmp(c[1],"\n") == 0)
@@ -44,6 +47,19 @@ int def_check(char *c[]){
       return -1;
     }
   }
-  else
+
+  else if (c[1] && (strcmp(c[1],def_str[1]) == 0)) { //>
+    if (c[2]) {
+      int fd = open(c[2],O_CREAT|O_RDWR,0777);
+      //int din = dup(1);
+      dup2(fd,1);
+      //dup2(din,1);
+      return 0;
+    }
+  }
+  
+  else {
+    printf("\treach end of def_check\n");
     return execvp(c[0],c);
+  }
 }

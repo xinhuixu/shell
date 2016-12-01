@@ -34,8 +34,9 @@ int main() {
     while ((command[i] = strsep(&bufadd," ")))
       i++;
 
-    if (strcmp(command[0],"exit") == 0)
-      exit(0);
+    if (strcmp(command[0],"exit") == 0){
+      bye();
+    }
 
     int f = fork();
     if (f == 0) {
