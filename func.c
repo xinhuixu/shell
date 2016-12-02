@@ -7,7 +7,7 @@
 #include <sys/types.h>
 
 void prompt(){
-  printf("what's good: ");
+  printf("what's good$ ");
 }
 
 void parray(char *c[]){
@@ -34,15 +34,18 @@ void cmd_before(char *c1[], char *c[], int i){
         strcpy(c1[j],c[j]);
         j++;
       }
+}
 
-      /*
-      int fd = open(c[2],O_CREAT|O_RDWR,0644);
-      int r = dup2(fd,1);
-      close(fd);
-      if (r<0){
-        perror("dup2");
-        return r;
-      }*/
+void cmd_after(char *c2[], char *c[], int i){
+  int j = 0;
+  i++;
+  while(c[i]){
+    c2[j]=(char *)malloc(sizeof(c[i]));
+    strcpy(c2[j],c[i]);
+    j++;
+    i++;
+  }
+
 }
 
 int def_check(char *c[]){
@@ -68,16 +71,27 @@ int def_check(char *c[]){
   while (c[i]) {
   
     if (strcmp(c[i],">") == 0){ //>
-      char *c1[i];
-      cmd_before(c1,c,i);
-      //parray(c1);
+      printf("i: %d\n",i);
+      char **c1 = (char **)malloc(100);
+      cmd_before(c1,c,i); //build c1 as cmd before
+      parray(c1);
+      char **c2 = (char **)malloc(100);
+      cmd_after(c2,c,i);
+      parray(c2);
+      int fd = open(c[2],O_CREAT|O_RDWR,0644);
+      int r = dup2(fd,1);
+      
+      execvp(c1[0],c1);
+      close(fd);
+      
+      free(c1);
+      free(c2);
       return 0;
     }
-    //if (strcmp(c[i],def_str[2]) == 0) //<
-    //  redir_i(c,i);
+
     i++;
   }
   
-    //printf("\treach end of def_check\n");
-    return execvp(c[0],c);
+  printf("\treach end of def_check\n");
+  return execvp(c[0],c);
 }
