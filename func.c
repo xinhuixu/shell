@@ -48,8 +48,13 @@ void cmd_after(char *c2[], char *c[], int i){
 
 }
 
+int is_op(char *c){
+  return (strcmp(c,">") == 0 ||
+	  strcmp(c,"<") == 0 ||
+	  strcmp(c,"|") == 0);
+}
+
 int def_check(char *c[]){
-  //parray(c);
   int err;
   int i;
   
@@ -78,7 +83,7 @@ int def_check(char *c[]){
       char **c2 = (char **)malloc(100);
       cmd_after(c2,c,i);
       parray(c2);
-      int fd = open(c[2],O_CREAT|O_RDWR,0644);
+      int fd = open(c2[0],O_CREAT|O_RDWR,0644);
       int r = dup2(fd,1);
       
       execvp(c1[0],c1);
