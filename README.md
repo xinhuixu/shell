@@ -1,4 +1,4 @@
-# shell - xinhui xu pd10
+# what's good$ - xinhui xu pd10
 
 **note**
 - assumed white spaces around '>', '|', '<'
