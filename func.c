@@ -75,19 +75,24 @@ int def_check(char *c[]){
   i = 1;
   while (c[i]) {
   
-    if (strcmp(c[i],">") == 0){ //>
-      printf("i: %d\n",i);
+    if (is_op(c[i])){
       char **c1 = (char **)malloc(100);
       cmd_before(c1,c,i); //build c1 as cmd before
-      parray(c1);
       char **c2 = (char **)malloc(100);
       cmd_after(c2,c,i);
-      parray(c2);
-      int fd = open(c2[0],O_CREAT|O_RDWR,0644);
-      int r = dup2(fd,1);
-      
-      execvp(c1[0],c1);
-      close(fd);
+      int fd, r;
+      if (strcmp(c[i],">")==0) {
+	fd = open(c2[0],O_CREAT|O_RDWR,0644);
+	r = dup2(fd,1);
+	execvp(c1[0],c1);
+	close(fd);
+      }
+      else if (strcmp(c[i],"<")==0) {
+	fd = open(c2[0],O_CREAT|O_RDWR,0644);
+	r = dup2(fd,0); 
+	execvp(c1[0],c1);
+	close(fd);
+      }
       
       free(c1);
       free(c2);
@@ -97,6 +102,6 @@ int def_check(char *c[]){
     i++;
   }
   
-  printf("\treach end of def_check\n");
+  //printf("\treach end of def_check\n");
   return execvp(c[0],c);
 }
