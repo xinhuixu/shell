@@ -57,6 +57,7 @@ int is_op(char *c){
 int def_check(char *c[]){
   int err;
   int i;
+  int status;
   
   if (strcmp(c[0],"cd") == 0) { //cd
     if (c[1]){
@@ -77,10 +78,12 @@ int def_check(char *c[]){
   
     if (is_op(c[i])){
       char **c1 = (char **)malloc(100);
-      cmd_before(c1,c,i); //build c1 as cmd before
+      cmd_before(c1,c,i);
       char **c2 = (char **)malloc(100);
       cmd_after(c2,c,i);
-      int fd, r;
+      int fd, r, stdin, f;
+      int fd_p[2]; //pipe
+      
       if (strcmp(c[i],">")==0) {
 	fd = open(c2[0],O_CREAT|O_RDWR,0644);
 	r = dup2(fd,1);
@@ -93,7 +96,25 @@ int def_check(char *c[]){
 	execvp(c1[0],c1);
 	close(fd);
       }
-      
+      else if (strcmp(c[i],"|")==0) {
+	stdin = dup(0);
+	pipe(fd_p);
+
+	f = fork();
+	if (f == 0) {
+	  close(fd_p[0]);
+	  dup2(fd_p[1],1);
+	  err = execvp(c1[0],c1);
+	  exit(0);
+	} else {
+	  wait(&status);
+	  close(fd_p[1]);
+	  dup2(fd_p[0], 0);
+	  err = execvp(c2[0],c2);
+	  dup2(stdin, 0);
+	}
+      }
+	
       free(c1);
       free(c2);
       return 0;
