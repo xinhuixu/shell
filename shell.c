@@ -15,12 +15,6 @@ int main() {
 
   while (1){
 
-    /*
-      TODO: 
-      - ? C^D reprints last stdout
-      - use file to test instead of retyping
-      - sep use ;
-     */
     signal(SIGINT, sighandler);
 
     char buf[50];
@@ -30,27 +24,35 @@ int main() {
     *(strchr(bufadd, '\n')) = 0;
     char *command[10];
     int i = 0;
-
-    while ((command[i] = strsep(&bufadd," ")))
+    while ((command[i] = strsep(&bufadd,";"))){
       i++;
-
-    if (strcmp(command[0],"exit") == 0){
-      bye();
     }
 
-    int f = fork();
-    if (f == 0) {
-      int err = def_check(command);
-      if (err) {
-	perror("shell");
-	exit(err);
+    i = 0;
+    while (command[i]){
+
+      char *temp = (char *)malloc(sizeof(command[i]));
+      strcpy(temp,command[i]);
+      char *sc[10];
+      int j = 0;
+      while ((sc[j] = strsep(&temp," "))) {
+	j++;
       }
-    }
-    else {
-      int status, r;
-      r = wait( &status ); // terminated child
-      //check_status(status); //currently replaced by perror()
-      //      printf("\t!wait returned: %d, status: %d\n", r, status);
+      
+      int f = fork();
+      if (f == 0) {
+	int err = def_check(sc);
+	if (err) {
+	  perror("shell");
+	  exit(err);
+	}
+      }
+      else {
+	int status, r;
+	r = wait( &status ); // terminated child
+      }
+      
+      i++;
     }
   }
 }

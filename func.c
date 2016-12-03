@@ -19,7 +19,7 @@ void parray(char *c[]){
 }
 
 void pstr(char *c){
-  printf("str = %s\n",c);
+  printf("%s\n",c);
 }
 
 void bye(){
@@ -53,6 +53,17 @@ int is_op(char *c){
 	  strcmp(c,"<") == 0 ||
 	  strcmp(c,"|") == 0);
 }
+
+/*void kill_front_space(char *c){
+  int i = 0;
+  if (strcmp(c[i]," ") == 0){
+    while (c[i]){
+      strcpy(c[i],c[i+1]);
+      i++;
+    }
+    //    c[i] = 0;
+  }
+  }*/
 
 int def_check(char *c[]){
   int err;
@@ -114,7 +125,7 @@ int def_check(char *c[]){
 	  dup2(stdin, 0);
 	}
       }
-	
+      
       free(c1);
       free(c2);
       return 0;
