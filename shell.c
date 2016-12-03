@@ -38,6 +38,9 @@ int main() {
       while ((sc[j] = strsep(&temp," "))) {
 	j++;
       }
+
+      if (strcmp(sc[0],"exit")==0)
+	exit(0);
       
       int f = fork();
       if (f == 0) {

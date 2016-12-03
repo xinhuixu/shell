@@ -54,17 +54,6 @@ int is_op(char *c){
 	  strcmp(c,"|") == 0);
 }
 
-/*void kill_front_space(char *c){
-  int i = 0;
-  if (strcmp(c[i]," ") == 0){
-    while (c[i]){
-      strcpy(c[i],c[i+1]);
-      i++;
-    }
-    //    c[i] = 0;
-  }
-  }*/
-
 int def_check(char *c[]){
   int err;
   int i;

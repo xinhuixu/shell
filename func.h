@@ -1,9 +1,12 @@
 #ifndef FUNC_H
 #define FUNC_H
 
-char *def_str[2];
 void prompt();
 void parray(char *[]);
+void pstr(char *);
+void bye();
+void cmd_before(char **, char **, int);
+void cmd_after(char **, char **, int);
 int check_status(int);
 int def_check(char *[]);
 
